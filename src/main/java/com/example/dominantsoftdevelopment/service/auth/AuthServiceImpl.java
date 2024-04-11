@@ -7,6 +7,7 @@ import com.example.dominantsoftdevelopment.dto.RegisterDTO;
 import com.example.dominantsoftdevelopment.dto.TokenDTO;
 import com.example.dominantsoftdevelopment.exceptions.RestException;
 import com.example.dominantsoftdevelopment.model.User;
+import com.example.dominantsoftdevelopment.model.enums.Country;
 import com.example.dominantsoftdevelopment.model.enums.Roles;
 import com.example.dominantsoftdevelopment.otp.OTP;
 import com.example.dominantsoftdevelopment.repository.AttachmentRepository;
@@ -26,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -93,7 +95,7 @@ public class AuthServiceImpl implements AuthService {
         if (otp.getSendTime().plusMinutes(3).isBefore(LocalDateTime.now())){
             throw RestException.restThrow("Code expired",HttpStatus.BAD_REQUEST);
         }
-
+        
         User user = User.builder()
                 .firstName(registerDTO.firstName())
                 .lastName(registerDTO.lastName())
