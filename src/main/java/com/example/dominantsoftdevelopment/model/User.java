@@ -38,11 +38,11 @@ public class User extends BaseModel implements UserDetails {
     @Builder.Default
     private boolean accountNonLocked = true;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Attachment attachment;
-
-    @Enumerated(EnumType.STRING)
-    private Roles roles;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    private Attachment attachment;
+//
+//    @Enumerated(EnumType.STRING)
+//    private Roles roles;
 
 
     @Override
@@ -52,7 +52,8 @@ public class User extends BaseModel implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(roles.name()));
+//        return Collections.singleton(new SimpleGrantedAuthority(roles.name()));
+        return null;
     }
 
     @Override
