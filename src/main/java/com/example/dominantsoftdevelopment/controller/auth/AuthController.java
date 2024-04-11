@@ -6,6 +6,7 @@ import com.example.dominantsoftdevelopment.dto.RegisterDTO;
 import com.example.dominantsoftdevelopment.dto.TokenDTO;
 import com.example.dominantsoftdevelopment.utils.AppConstants;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ public interface AuthController {
     String REFRESH_TOKEN_PATH = "/refresh-token";
     String REGISTER_PATH = "/register";
     String SEND_EMAIL = "/email";
+    String SEND_SMS = "/sms";
 
     @PostMapping(LOGIN_PATH)
     HttpEntity<ApiResult<TokenDTO>> login(@Valid @RequestBody LoginDTO loginDTO);
@@ -30,6 +32,9 @@ public interface AuthController {
     HttpEntity<ApiResult<?>> register(@Valid @RequestBody RegisterDTO registerDTO);
 
     @PostMapping(SEND_EMAIL)
-    HttpEntity<ApiResult<Boolean>> sendEmail(@RequestParam String email);
+    HttpEntity<ApiResult<Boolean>> sendEmail( @Valid @Email @RequestParam String email);
+
+    @PostMapping(SEND_SMS)
+    HttpEntity<ApiResult<Boolean>> sendSMS(@RequestParam String phoneNumber);
 
 }

@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @RedisHash(timeToLive = 3600 * 7)
+@Builder
 public class OTP {
     @Id
     private String phoneNumber;
@@ -31,7 +32,8 @@ public class OTP {
     private String lastName;
 
     private String password;
-    private int code;
+
+    private String code;
 
     private boolean accountNonLocked = true;
 
@@ -40,5 +42,6 @@ public class OTP {
     private Roles roles;
 
     private LocalDateTime sendTime;
+
     private int sentCount;
 }

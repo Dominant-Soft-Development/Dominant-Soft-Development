@@ -16,4 +16,5 @@ public interface AuthService extends UserDetailsService {
 
     ApiResult<Boolean> sendEmail(String email);
 
+    ApiResult<Boolean> sendSms(String phoneNumber);
 }

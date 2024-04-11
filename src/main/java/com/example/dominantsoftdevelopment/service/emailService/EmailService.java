@@ -1,9 +1,11 @@
 package com.example.dominantsoftdevelopment.service.emailService;
 
 
+import com.example.dominantsoftdevelopment.exceptions.RestException;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.http.HttpStatus;
 
 import java.util.Properties;
 import java.util.Random;
@@ -45,10 +47,8 @@ public class EmailService {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw RestException.restThrow("send email exception", HttpStatus.BAD_REQUEST);
         }
-
-        return false;
     }
 
     public static String getGenerationCode(){

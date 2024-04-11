@@ -7,8 +7,12 @@ import com.example.dominantsoftdevelopment.dto.RegisterDTO;
 import com.example.dominantsoftdevelopment.dto.TokenDTO;
 import com.example.dominantsoftdevelopment.exceptions.RestException;
 import com.example.dominantsoftdevelopment.model.User;
+import com.example.dominantsoftdevelopment.model.enums.Roles;
+import com.example.dominantsoftdevelopment.otp.OTP;
 import com.example.dominantsoftdevelopment.repository.AttachmentRepository;
+import com.example.dominantsoftdevelopment.repository.OTPRepository;
 import com.example.dominantsoftdevelopment.repository.UserRepository;
+import com.example.dominantsoftdevelopment.service.SendSMS.SendSMSService;
 import com.example.dominantsoftdevelopment.service.emailService.EmailService;
 import com.example.dominantsoftdevelopment.utils.AppConstants;
 import org.springframework.context.annotation.Lazy;
@@ -21,6 +25,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -32,16 +37,21 @@ public class AuthServiceImpl implements AuthService {
     private final JWTProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final AttachmentRepository attachmentRepository;
+    private final SendSMSService sendSMSService;
+    private final OTPRepository otpRepository;
 
     public AuthServiceImpl(UserRepository userRepository,
                            @Lazy AuthenticationManager authenticationManager,
                            PasswordEncoder passwordEncoder, JWTProvider jwtProvider,
-                           AttachmentRepository attachmentRepository) {
+                           AttachmentRepository attachmentRepository, SendSMSService sendSMSService,
+                           OTPRepository otpRepository) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.jwtProvider = jwtProvider;
         this.passwordEncoder = passwordEncoder;
         this.attachmentRepository = attachmentRepository;
+        this.sendSMSService = sendSMSService;
+        this.otpRepository = otpRepository;
     }
 
     @Override
@@ -74,36 +84,50 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ApiResult<?> register(RegisterDTO registerDTO) {
+        OTP otp = otpRepository.findByPhoneNumber(registerDTO.phoneNumber())
+                .orElseThrow(() -> RestException.restThrow("PhoneNumber not found wrong sms code", HttpStatus.BAD_REQUEST));
 
-//        activatsya kodni tekshirish kerak phoneNumber buyicha
+        if (!registerDTO.code().equals(Integer.parseInt(otp.getCode()))){
+            throw RestException.restThrow("Wrong sms code",HttpStatus.BAD_REQUEST);
+        }
+        if (otp.getSendTime().plusMinutes(3).isBefore(LocalDateTime.now())){
+            throw RestException.restThrow("Code expired",HttpStatus.BAD_REQUEST);
+        }
 
-        if (!registerDTO.password().equals(registerDTO.perPassword()))
-            throw RestException.restThrow("parrollar birxilmas", HttpStatus.BAD_REQUEST);
+        User user = User.builder()
+                .firstName(registerDTO.firstName())
+                .lastName(registerDTO.lastName())
+                .email(registerDTO.email())
+                .password(passwordEncoder.encode(registerDTO.password()))
+                .phoneNumber(registerDTO.phoneNumber())
+                .roles(Roles.USER)
+                .build();
+        userRepository.save(user);
 
-        return ApiResult.successResponse("successfully");
+        return ApiResult.successResponse(generateTokenDTO(user));
     }
 
     @Override
     public ApiResult<Boolean> sendEmail(String email) {
-        Optional<User> byEmail = userRepository.findByEmail(email);
         String generationCode = EmailService.getGenerationCode();
 
-        if (byEmail.isPresent()) {
-//            redisga saqlash kerak
-            boolean b = EmailService.sendMessageToEmail(email, generationCode);
-
-            if (!b) {
-                throw RestException.restThrow("iltimos birozdan sung qayta urunib kuring", HttpStatus.BAD_REQUEST);
-            }
-            userRepository.save(byEmail.get());
-            return ApiResult.successResponse(true);
+        if (!EmailService.sendMessageToEmail(email,generationCode)){
+            throw RestException.restThrow("send email wrong",HttpStatus.BAD_REQUEST);
         }
 
-        boolean res = EmailService.sendMessageToEmail(email, generationCode);
-        if (!res) {
-            throw RestException.restThrow("iltimos birozdan sung qayta urunib kuring", HttpStatus.BAD_REQUEST);
+        otpRepository.save(OTP.builder().email(email).code(generationCode).build());
+        return ApiResult.successResponse(true);
+    }
+
+    @Override
+    public ApiResult<Boolean> sendSms(String phoneNumber) {
+        String code = EmailService.getGenerationCode();
+
+        if (!sendSMSService.sendSMS(phoneNumber,code)) {
+            throw RestException.restThrow("send sms wrong",HttpStatus.BAD_REQUEST);
         }
 
+        otpRepository.save(OTP.builder().phoneNumber(phoneNumber).code(code).sendTime(LocalDateTime.now()).build());
         return ApiResult.successResponse(true);
     }
 
@@ -130,10 +154,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public User checkCredential(String username, String password) {
-        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(
-                username,
-                password
-        );
+        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
         return (User) authentication.getPrincipal();

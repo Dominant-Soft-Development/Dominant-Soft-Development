@@ -5,6 +5,8 @@ import com.example.dominantsoftdevelopment.dto.LoginDTO;
 import com.example.dominantsoftdevelopment.dto.RegisterDTO;
 import com.example.dominantsoftdevelopment.dto.TokenDTO;
 import com.example.dominantsoftdevelopment.service.auth.AuthService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -37,4 +39,8 @@ public class AuthControllerImpl implements AuthController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(authService.sendEmail(email));
     }
 
+    @Override
+    public HttpEntity<ApiResult<Boolean>> sendSMS(String phoneNumber) {
+        return ResponseEntity.ok(authService.sendSms(phoneNumber));
+    }
 }

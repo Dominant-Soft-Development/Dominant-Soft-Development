@@ -1,11 +1,12 @@
 package com.example.dominantsoftdevelopment.service.SendSMS;
 
 import com.example.dominantsoftdevelopment.dto.ApiResponse;
+import com.example.dominantsoftdevelopment.exceptions.RestException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 
 import java.io.IOException;
 import java.net.URI;
@@ -46,7 +47,7 @@ public class SendSMSService {
         }
     }
 
-    public String getSmsToken(String login, String password, String baseUri, String loginUri)
+    private String getSmsToken(String login, String password, String baseUri, String loginUri)
             throws IOException, InterruptedException, SmsProvider.BadRequestException, SmsProvider.ApiResponseNullException, SmsProvider.TokenNullException {
 
         System.out.println(password);
@@ -78,7 +79,7 @@ public class SendSMSService {
     }
 
 
-    public String sendSMS(String phoneNumber, String code) {
+    public Boolean sendSMS(String phoneNumber, String code) {
         try {
 
             String smsToken = getSmsToken(login, password, baseUri, loginUri);
@@ -95,15 +96,15 @@ public class SendSMSService {
                     .build();
             System.out.println(smsToken);
             Request request = new Request.Builder()
-                    .url(baseUri+"/api/message/sms/send")
+                    .url(baseUri + "/api/message/sms/send")
                     .addHeader("Authorization", "Bearer " + smsToken)
                     .method("POST", body)
                     .build();
             Response response = client.newCall(request).execute();
 
-            return response.body() != null ? response.body().string() : "-1";
+            return response.body() != null;
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw RestException.restThrow("wrong send sms", HttpStatus.BAD_REQUEST);
         }
     }
 }
