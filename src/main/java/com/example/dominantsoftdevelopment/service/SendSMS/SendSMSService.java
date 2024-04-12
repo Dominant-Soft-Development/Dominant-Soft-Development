@@ -50,7 +50,6 @@ public class SendSMSService {
     private String getSmsToken(String login, String password, String baseUri, String loginUri)
             throws IOException, InterruptedException, SmsProvider.BadRequestException, SmsProvider.ApiResponseNullException, SmsProvider.TokenNullException {
 
-        System.out.println(password);
 
         HttpClient client = HttpClient.newHttpClient();
 
@@ -83,6 +82,7 @@ public class SendSMSService {
         try {
 
             String smsToken = getSmsToken(login, password, baseUri, loginUri);
+            System.out.println(smsToken);
 
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
@@ -92,17 +92,18 @@ public class SendSMSService {
                     .addFormDataPart("mobile_phone", phoneNumber)
                     .addFormDataPart("message", code)
                     .addFormDataPart("from", "4546")
-                    .addFormDataPart("callback_url", "http://0000.uz/test.php")
+//                    .addFormDataPart("callback_url", "http://0000.uz/test.php")
                     .build();
-            System.out.println(smsToken);
+
             Request request = new Request.Builder()
                     .url(baseUri + "/api/message/sms/send")
                     .addHeader("Authorization", "Bearer " + smsToken)
                     .method("POST", body)
                     .build();
             Response response = client.newCall(request).execute();
+            System.out.println(response);
 
-            return response.body() != null;
+            return response.code()==200;
         } catch (Exception e) {
             throw RestException.restThrow("wrong send sms", HttpStatus.BAD_REQUEST);
         }

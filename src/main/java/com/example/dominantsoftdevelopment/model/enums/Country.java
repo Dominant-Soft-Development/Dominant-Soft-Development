@@ -1,7 +1,10 @@
 package com.example.dominantsoftdevelopment.model.enums;
 
+import lombok.Getter;
+
 import java.util.*;
 
+@Getter
 public enum Country {
     UZBEKISTAN(List.of("Qashqadaryo","Surxondaryo","Toshkent")),
     KAZAKHSTAN(List.of("Nur-Sulton","qazzaq","Toshkent-qazaq"));
@@ -10,10 +13,6 @@ public enum Country {
 
     Country(List<String> region) {
         this.region = region;
-    }
-
-    public List<String> getRegion() {
-        return region;
     }
 
     public void setRegion(List<String> region) {
