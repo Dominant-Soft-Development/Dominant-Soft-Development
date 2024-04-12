@@ -1,6 +1,7 @@
 package com.example.dominantsoftdevelopment.model;
 
 import com.example.dominantsoftdevelopment.model.baseData.BaseModel;
+import com.example.dominantsoftdevelopment.model.enums.Address;
 import com.example.dominantsoftdevelopment.model.enums.Roles;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,11 +39,14 @@ public class User extends BaseModel implements UserDetails {
     @Builder.Default
     private boolean accountNonLocked = true;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    private Attachment attachment;
-//
-//    @Enumerated(EnumType.STRING)
-//    private Roles roles;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Attachment attachment;
+
+    @Enumerated(EnumType.STRING)
+    private Roles roles;
+
+    @ManyToOne
+    private Address address;
 
 
     @Override
@@ -52,8 +56,7 @@ public class User extends BaseModel implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return Collections.singleton(new SimpleGrantedAuthority(roles.name()));
-        return null;
+        return Collections.singleton(new SimpleGrantedAuthority(roles.name()));
     }
 
     @Override

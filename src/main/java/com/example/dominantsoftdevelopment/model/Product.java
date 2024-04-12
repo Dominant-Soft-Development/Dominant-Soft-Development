@@ -1,9 +1,12 @@
 package com.example.dominantsoftdevelopment.model;
 
 import com.example.dominantsoftdevelopment.model.baseData.BaseModel;
+import com.example.dominantsoftdevelopment.model.enums.ConditionProduct;
+import com.example.dominantsoftdevelopment.model.enums.PayType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
 import java.util.List;
 
 @Getter
@@ -24,7 +27,17 @@ public class Product extends BaseModel {
     @ManyToOne
     Category productCategory;
 
+    Boolean availability;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    PayType payType;
+
     String productBrand;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    ConditionProduct conditionProduct;
 
     @Column(nullable = false)
     private String description;
@@ -32,9 +45,8 @@ public class Product extends BaseModel {
     @ManyToOne
     User seller;
 
-    @OneToMany
-    List<Attachment> attachment;
-
+    @ManyToOne
+    Attachment attachment;
 
 
 }
