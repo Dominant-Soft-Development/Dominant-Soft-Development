@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Address extends BaseModel {
+    @Enumerated(EnumType.STRING)
     Country country;
     String region;
 }

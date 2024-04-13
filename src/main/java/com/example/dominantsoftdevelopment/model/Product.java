@@ -6,8 +6,7 @@ import com.example.dominantsoftdevelopment.model.enums.PayType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -45,8 +44,6 @@ public class Product extends BaseModel {
     @ManyToOne
     User seller;
 
-    @ManyToOne
-    Attachment attachment;
-
-
+    @OneToMany
+    List<Attachment> attachment;
 }
