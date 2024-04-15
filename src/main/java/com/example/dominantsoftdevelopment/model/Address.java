@@ -1,6 +1,7 @@
-package com.example.dominantsoftdevelopment.model.enums;
+package com.example.dominantsoftdevelopment.model;
 
 import com.example.dominantsoftdevelopment.model.baseData.BaseModel;
+import com.example.dominantsoftdevelopment.model.enums.Country;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -13,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Address extends BaseModel {
+    @Enumerated(EnumType.STRING)
     Country country;
     String region;
 }
