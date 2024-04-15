@@ -1,7 +1,6 @@
 package com.example.dominantsoftdevelopment.model;
 
 import com.example.dominantsoftdevelopment.model.baseData.BaseModel;
-import com.example.dominantsoftdevelopment.model.enums.Address;
 import com.example.dominantsoftdevelopment.model.enums.Roles;
 import jakarta.persistence.*;
 import lombok.*;
