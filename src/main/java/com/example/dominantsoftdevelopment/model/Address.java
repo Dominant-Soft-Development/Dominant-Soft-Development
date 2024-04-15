@@ -1,6 +1,7 @@
-package com.example.dominantsoftdevelopment.model.enums;
+package com.example.dominantsoftdevelopment.model;
 
 import com.example.dominantsoftdevelopment.model.baseData.BaseModel;
+import com.example.dominantsoftdevelopment.model.enums.Country;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
