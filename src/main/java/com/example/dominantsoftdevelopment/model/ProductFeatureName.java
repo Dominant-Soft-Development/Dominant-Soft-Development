@@ -17,6 +17,8 @@ public class ProductFeatureName extends BaseModel {
     @Column(nullable = false)
     String name;
     String measure;
-    @OneToMany
+    @OneToMany(mappedBy = "productFeatureName")
     List<ProductFutureValue> productFutureValues;
+    @ManyToOne
+    Category category;
 }
