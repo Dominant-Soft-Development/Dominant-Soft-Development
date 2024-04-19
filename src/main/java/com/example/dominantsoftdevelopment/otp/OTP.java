@@ -3,15 +3,10 @@ package com.example.dominantsoftdevelopment.otp;
 
 import com.example.dominantsoftdevelopment.model.Attachment;
 import com.example.dominantsoftdevelopment.model.enums.Roles;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -19,7 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @RedisHash(timeToLive = 3600 * 7)
 @Builder
-public class OTP {
+public class OTP  {
     @Id
     private String phoneNumber;
 
