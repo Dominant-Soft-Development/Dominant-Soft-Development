@@ -14,7 +14,7 @@ import com.example.dominantsoftdevelopment.repository.AttachmentRepository;
 import com.example.dominantsoftdevelopment.repository.OTPRepository;
 import com.example.dominantsoftdevelopment.repository.UserRepository;
 import com.example.dominantsoftdevelopment.service.SendSMS.SendSMSService;
-import com.example.dominantsoftdevelopment.service.emailService.EmailService;
+//import com.example.dominantsoftdevelopment.service.emailService.EmailService;
 import com.example.dominantsoftdevelopment.utils.AppConstants;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
@@ -86,60 +86,71 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ApiResult<?> register(RegisterDTO registerDTO) {
-        OTP otp = otpRepository.findByPhoneNumber(registerDTO.phoneNumber())
-                .orElseThrow(() -> RestException.restThrow("PhoneNumber not found wrong sms code", HttpStatus.BAD_REQUEST));
-
-        if (userRepository.findByPhoneNumber(registerDTO.phoneNumber()).isPresent()){
-            throw RestException.restThrow("User already exsist",HttpStatus.BAD_REQUEST);
-        }
-
-        if (!registerDTO.code().equals(Integer.parseInt(otp.getCode()))){
-            throw RestException.restThrow("Wrong sms code",HttpStatus.BAD_REQUEST);
-        }
-        if (otp.getSendTime().plusMinutes(3).isBefore(LocalDateTime.now())){
-            throw RestException.restThrow("Code expired",HttpStatus.BAD_REQUEST);
-        }
-
-        User user = User.builder()
-                .firstName(registerDTO.firstName())
-                .lastName(registerDTO.lastName())
-                .email(registerDTO.email())
-                .password(passwordEncoder.encode(registerDTO.password()))
-                .phoneNumber(registerDTO.phoneNumber())
-                .roles(Roles.USER)
-                .build();
-        userRepository.save(user);
-
-        return ApiResult.successResponse(generateTokenDTO(user));
+//        OTP otp = otpRepository.findByPhoneNumber(registerDTO.phoneNumber())
+//                .orElseThrow(() -> RestException.restThrow("PhoneNumber not found wrong sms code", HttpStatus.BAD_REQUEST));
+//
+//        if (userRepository.findByPhoneNumber(registerDTO.phoneNumber()).isPresent()){
+//            throw RestException.restThrow("User already exsist",HttpStatus.BAD_REQUEST);
+//        }
+//
+//        if (!registerDTO.code().equals(Integer.parseInt(otp.getCode()))){
+//            throw RestException.restThrow("Wrong sms code",HttpStatus.BAD_REQUEST);
+//        }
+//        if (otp.getSendTime().plusMinutes(3).isBefore(LocalDateTime.now())){
+//            throw RestException.restThrow("Code expired",HttpStatus.BAD_REQUEST);
+//        }
+//
+//        User user = User.builder()
+//                .firstName(registerDTO.firstName())
+//                .lastName(registerDTO.lastName())
+//                .email(registerDTO.email())
+//                .password(passwordEncoder.encode(registerDTO.password()))
+//                .phoneNumber(registerDTO.phoneNumber())
+//                .roles(Roles.USER)
+//                .build();
+//        userRepository.save(user);
+//
+//        return ApiResult.successResponse(generateTokenDTO(user));
+        return null;
     }
 
     @Override
     public ApiResult<Boolean> sendEmail(String email) {
-        String generationCode = EmailService.getGenerationCode();
-
-        if (!EmailService.sendMessageToEmail(email,generationCode)){
-            throw RestException.restThrow("send email wrong",HttpStatus.BAD_REQUEST);
-        }
-
-        otpRepository.save(OTP.builder().email(email).code(generationCode).build());
-        return ApiResult.successResponse(true);
+        return null;
     }
 
     @Override
     public ApiResult<Boolean> sendSms(String phoneNumber) {
-        String code = EmailService.getGenerationCode();
-
-        Boolean b = sendSMSService.sendSMS(phoneNumber, code);
-        System.out.println(b);
-//        if (!b) {
-//            throw RestException.restThrow("send sms wrong",HttpStatus.BAD_REQUEST);
-//        }
-
-        System.out.println(code);
-
-        otpRepository.save(OTP.builder().phoneNumber(phoneNumber).code(code).sendTime(LocalDateTime.now()).build());
-        return ApiResult.successResponse(true);
+        return null;
     }
+
+//    @Override
+//    public ApiResult<Boolean> sendEmail(String email) {
+//        String generationCode = EmailService.getGenerationCode();
+//
+//        if (!EmailService.sendMessageToEmail(email,generationCode)){
+//            throw RestException.restThrow("send email wrong",HttpStatus.BAD_REQUEST);
+//        }
+//
+//        otpRepository.save(OTP.builder().email(email).code(generationCode).build());
+//        return ApiResult.successResponse(true);
+//    }
+//
+//    @Override
+//    public ApiResult<Boolean> sendSms(String phoneNumber) {
+//        String code = EmailService.getGenerationCode();
+//
+//        Boolean b = sendSMSService.sendSMS(phoneNumber, code);
+//        System.out.println(b);
+////        if (!b) {
+////            throw RestException.restThrow("send sms wrong",HttpStatus.BAD_REQUEST);
+////        }
+//
+//        System.out.println(code);
+//
+//        otpRepository.save(OTP.builder().phoneNumber(phoneNumber).code(code).sendTime(LocalDateTime.now()).build());
+//        return ApiResult.successResponse(true);
+//    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
