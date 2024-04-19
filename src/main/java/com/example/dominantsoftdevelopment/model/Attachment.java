@@ -29,7 +29,4 @@ public class Attachment {
     @Column(nullable = false)
     private Long size;
 
-
-
-
 }
