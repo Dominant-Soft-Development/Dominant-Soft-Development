@@ -37,4 +37,6 @@ public interface AuthController {
     @PostMapping(SEND_SMS)
     HttpEntity<ApiResult<Boolean>> sendSMS(@RequestParam String phoneNumber);
 
+
+
 }

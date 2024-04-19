@@ -1,33 +1,21 @@
 package com.example.dominantsoftdevelopment.email;
 
-import com.example.dominantsoftdevelopment.dto.OtpVerifyDto;
 import com.example.dominantsoftdevelopment.email.dto.OtpVerifyEmailDto;
-import com.example.dominantsoftdevelopment.email.dto.UserCreateDto;
-import com.example.dominantsoftdevelopment.email.dto.UserResponseDto;
-import com.example.dominantsoftdevelopment.email.dto.UserSignInDto;
-import com.example.dominantsoftdevelopment.exception.EmailAlreadyExistException;
-import com.example.dominantsoftdevelopment.exception.InvalidEmailAddressException;
-import com.example.dominantsoftdevelopment.exception.PasswordNotMatchException;
 import com.example.dominantsoftdevelopment.model.EmailCode;
-import com.example.dominantsoftdevelopment.exception.EmailVerificationException;
+import com.example.dominantsoftdevelopment.exceptions.EmailVerificationException;
 import com.example.dominantsoftdevelopment.model.User;
-import com.example.dominantsoftdevelopment.otp.OTP;
 import com.example.dominantsoftdevelopment.repository.EmailCodeRepository;
 import com.example.dominantsoftdevelopment.repository.OTPRepository;
 import com.example.dominantsoftdevelopment.repository.UserRepository;
 import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -142,29 +130,5 @@ public class EmailCodeService {
     private int generateCode(){
         Random random = new Random();
         return random.nextInt( 100000, 999999 );
-    }
-
-    public UserResponseDto forgotPasswordVerifyCode(@Valid OtpVerifyEmailDto verifyDto) {
-
-
-
-        String email = verifyDto.getEmail();
-        System.out.println("email = " + email);
-        String code = String.valueOf(verifyDto.getCode());
-
-        EmailCode emailCode = emailCodeRepository.findById( email )
-                .orElseThrow( () -> new EmailVerificationException( "the email code already expired" ) );
-
-        if( emailCode.getLastSentTime().plusMinutes( 5 ).isBefore( LocalDateTime.now() ) ) {
-            throw new EmailVerificationException( "the email code already expired" );
-        }
-
-        if( !emailCode.getCode().equals( code ) ) {
-            throw new EmailVerificationException( "Email code doesn't match" );
-        }
-        otpRepository.deleteById(email);
-        User user = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new BadCredentialsException("Email not found"));
-        return mapper.map(user,UserResponseDto.class);
     }
 }

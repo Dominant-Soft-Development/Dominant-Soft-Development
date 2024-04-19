@@ -1,4 +1,4 @@
-package com.example.dominantsoftdevelopment.exception;
+package com.example.dominantsoftdevelopment.exceptions;
 
 public class EmailVerificationException extends RuntimeException{
     public EmailVerificationException(String message) {

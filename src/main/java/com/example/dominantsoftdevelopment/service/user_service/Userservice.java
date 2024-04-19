@@ -4,22 +4,17 @@ import com.example.dominantsoftdevelopment.dto.*;
 import com.example.dominantsoftdevelopment.email.EmailCodeService;
 import com.example.dominantsoftdevelopment.email.OTPEmail;
 import com.example.dominantsoftdevelopment.email.dto.*;
-import com.example.dominantsoftdevelopment.exception.EmailAlreadyExistException;
-import com.example.dominantsoftdevelopment.exception.InvalidEmailAddressException;
-import com.example.dominantsoftdevelopment.exception.PasswordNotMatchException;
+import com.example.dominantsoftdevelopment.exceptions.EmailAlreadyExistException;
+import com.example.dominantsoftdevelopment.exceptions.InvalidEmailAddressException;
+import com.example.dominantsoftdevelopment.exceptions.PasswordNotMatchException;
 import com.example.dominantsoftdevelopment.exceptions.RestException;
 import com.example.dominantsoftdevelopment.model.User;
 import com.example.dominantsoftdevelopment.model.enums.Status;
-import com.example.dominantsoftdevelopment.otp.OTP;
-import com.example.dominantsoftdevelopment.repository.EmailCodeRepository;
 import com.example.dominantsoftdevelopment.repository.OTPRepository;
 import com.example.dominantsoftdevelopment.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,33 +106,5 @@ public class Userservice {
 
         return modelMapper.map(userCreateDto, UserResponseDto.class);
     }
-    @Transactional
-    public void forgotPassword(String email) {
-        repository
-                .findUserByEmail(email)
-                .orElseThrow(() -> new BadCredentialsException("Email not found"));
-        emailService.sendEmail(email);
-    }
-
-
-    public UserResponseDto forgotPasswordNewPassword(ForgotPasswordDto forgotPasswordDto) {
-        String password = forgotPasswordDto.getPassword();
-        String confirmPassword = forgotPasswordDto.getConfirmPassword();
-        String email = forgotPasswordDto.getEmail();
-
-        if (!password.equals(confirmPassword)){
-            throw new PasswordNotMatchException("Password and confirm password not matched!");
-        }
-
-        User user = repository.findUserByEmail(email)
-                .orElseThrow(() -> new BadCredentialsException("User not found"));
-
-        user.setPassword(passwordEncoder.encode(forgotPasswordDto.getPassword()));
-
-        repository.save(user);
-
-        return modelMapper.map(user, UserResponseDto.class);
-    }
-
 }
 

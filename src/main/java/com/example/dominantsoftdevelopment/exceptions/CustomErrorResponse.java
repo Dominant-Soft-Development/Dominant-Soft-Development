@@ -1,4 +1,4 @@
-package com.example.dominantsoftdevelopment.exception;
+package com.example.dominantsoftdevelopment.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.example.dominantsoftdevelopment.exception;
+package com.example.dominantsoftdevelopment.exceptions;
 
 public class PasswordNotMatchException extends RuntimeException{
     public PasswordNotMatchException(String message) {
