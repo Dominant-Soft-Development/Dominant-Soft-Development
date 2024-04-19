@@ -46,7 +46,7 @@ public class User extends BaseModel implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Roles roles;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Address address;
 
     private Status status;

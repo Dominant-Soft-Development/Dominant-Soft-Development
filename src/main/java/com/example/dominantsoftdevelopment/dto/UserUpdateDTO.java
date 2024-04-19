@@ -1,16 +1,15 @@
 package com.example.dominantsoftdevelopment.dto;
 
+import com.example.dominantsoftdevelopment.model.Address;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class UserProfileDto {
-
-    Long id;
+public class UserUpdateDTO {
     String firstName;
-    String phoneNumber;
-    String email;
+    String lastName;
+    Address address;
 }
