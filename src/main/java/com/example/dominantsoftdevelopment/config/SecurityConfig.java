@@ -28,7 +28,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity.authorizeHttpRequests(matcherRegistry -> {
-            matcherRegistry.requestMatchers("/api/auth/**").permitAll();
+            matcherRegistry.requestMatchers("/api/auth/**", "/order").permitAll();
             matcherRegistry.requestMatchers("/api/**").authenticated();
             matcherRegistry.anyRequest().permitAll();
         });
