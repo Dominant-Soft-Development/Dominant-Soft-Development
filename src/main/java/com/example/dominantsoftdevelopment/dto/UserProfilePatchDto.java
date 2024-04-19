@@ -1,7 +1,7 @@
 package com.example.dominantsoftdevelopment.dto;
 
 import com.example.dominantsoftdevelopment.model.Address;
-import com.example.dominantsoftdevelopment.model.Attachment;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,12 +12,11 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserProfileDto {
+public class UserProfilePatchDto {
     Long id;
     String firstName;
     String lastName;
-    String phoneNumber;
-    String email;
-    Attachment attachment;
+    @JsonProperty("attachmentId")
+    Long attachment;
     Address address;
 }
