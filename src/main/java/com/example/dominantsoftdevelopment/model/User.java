@@ -85,4 +85,9 @@ public class User extends BaseModel implements UserDetails {
         return isAccountNonExpired() && isAccountNonLocked() && isCredentialsNonExpired() && isEnabled();
     }
 
+    public User(String firstName, String phoneNumber, String password) {
+        this.firstName = firstName;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+    }
 }
