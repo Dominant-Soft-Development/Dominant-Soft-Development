@@ -1,4 +1,4 @@
-package com.example.dominantsoftdevelopment.dto;
+package com.example.dominantsoftdevelopment.email.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

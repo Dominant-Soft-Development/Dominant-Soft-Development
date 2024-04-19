@@ -15,13 +15,13 @@ import java.time.LocalDateTime;
 @RedisHash(timeToLive = 3600 * 7)
 @Builder
 public class OTP  {
-    @Id
     private String phoneNumber;
 
     private String firstname;
 
     private String lastname;
 
+    @Id
     private String email;
 
     private String lastName;
