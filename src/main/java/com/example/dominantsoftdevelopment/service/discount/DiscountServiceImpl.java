@@ -7,7 +7,7 @@ import com.example.dominantsoftdevelopment.exceptions.RestException;
 import com.example.dominantsoftdevelopment.model.Discount;
 import com.example.dominantsoftdevelopment.model.Product;
 import com.example.dominantsoftdevelopment.repository.DiscountRepository;
-import com.example.dominantsoftdevelopment.repository.ProductRepository;
+import com.example.dominantsoftdevelopment.repository.product.ProductRepository;
 import com.example.dominantsoftdevelopment.rsql.SpecificationBuilder;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,7 +17,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

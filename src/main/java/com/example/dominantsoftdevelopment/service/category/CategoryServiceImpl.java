@@ -26,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public ApiResult<List<CategoryDTO>> all() {
         List<CategoryDTO> categoryDTOList = new ArrayList<>();
-        for (Category category : categoryRepository.findAllByDeletedFalse()) {
+        for (Category category : categoryRepository.findByParentCategoryIsNullAndDeletedFalse()) {
             CategoryDTO categoryDTO = CategoryDTO.builder()
                     .id(category.getId())
                     .name(category.getName())

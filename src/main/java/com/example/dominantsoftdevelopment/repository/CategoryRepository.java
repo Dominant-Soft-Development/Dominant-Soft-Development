@@ -8,7 +8,7 @@ import java.util.*;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category,Long> {
 
-    List<Category> findAllByDeletedFalse();
+    List<Category> findByParentCategoryIsNullAndDeletedFalse();
 
     List<Category> findByParentCategoryIdAndDeletedFalse(Long parentCategory_id);
 
