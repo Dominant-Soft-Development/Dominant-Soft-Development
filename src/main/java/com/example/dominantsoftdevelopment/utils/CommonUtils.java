@@ -23,6 +23,6 @@ public class CommonUtils {
     public static String makeFileUrl(Long id) {
         return ServletUriComponentsBuilder
                 .fromCurrentContextPath().path(AttachmentController.BASE_PATH)
-                .path(id.toString()).toUriString();
+                .path("/"+id.toString()).toUriString();
     }
 }

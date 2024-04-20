@@ -20,8 +20,8 @@ public interface AttachmentController {
     @PostMapping(UPLOAD_PATH)
     ApiResult<AttachmentDTO> uploadFile(MultipartHttpServletRequest request);
 
-    @PostMapping(UPLOAD_LIST_PATH)
-    ApiResult<List<AttachmentDTO>> uploadFile(List<MultipartHttpServletRequest> request);
+//    @PostMapping(UPLOAD_LIST_PATH)
+//    ApiResult<List<AttachmentDTO>> uploadFile(List<MultipartHttpServletRequest> request);
 
 
     @GetMapping("{id}")

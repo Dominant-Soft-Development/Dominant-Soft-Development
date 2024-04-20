@@ -4,7 +4,7 @@ import com.example.dominantsoftdevelopment.model.baseData.BaseModel;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.util.*;
+
 @Getter
 @Setter
 @Builder
@@ -12,12 +12,8 @@ import java.util.*;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class ProductFutures extends BaseModel {
-    @OneToMany
-    List<Product> product;
-    @OneToOne
+public class ProductFeatureValue extends BaseModel {
+    @ManyToOne
     ProductFeatureName productFeatureName;
-    @OneToOne
-    ProductFutureValue productFutureValue;
     String value;
 }

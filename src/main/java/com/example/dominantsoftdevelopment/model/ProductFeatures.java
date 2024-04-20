@@ -12,8 +12,12 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class ProductFutureValue extends BaseModel {
-    @ManyToOne
+public class ProductFeatures extends BaseModel {
+    @OneToOne
+    Product product;
+    @OneToOne
     ProductFeatureName productFeatureName;
+    @OneToOne
+    ProductFeatureValue productFutureValue;
     String value;
 }

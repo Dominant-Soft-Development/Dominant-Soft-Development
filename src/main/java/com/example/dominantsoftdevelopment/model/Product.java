@@ -32,7 +32,6 @@ public class Product extends BaseModel {
     @Enumerated(EnumType.STRING)
     PayType payType;
 
-    String productBrand;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

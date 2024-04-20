@@ -18,7 +18,7 @@ public class ProductFeatureName extends BaseModel {
     String name;
     String measure;
     @OneToMany(mappedBy = "productFeatureName")
-    List<ProductFutureValue> productFutureValues;
+    List<ProductFeatureValue> productFutureValues;//bu faqat mappetby uchun yozilgan
     @ManyToOne
     Category category;
 }

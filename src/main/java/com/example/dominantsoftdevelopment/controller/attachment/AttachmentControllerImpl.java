@@ -20,10 +20,11 @@ public record AttachmentControllerImpl(AttachmentService attachmentService) impl
         return attachmentService.uploadFile(request);
     }
 
-    @Override
-    public ApiResult<List<AttachmentDTO>> uploadFile(List<MultipartHttpServletRequest> request) {
-        return attachmentService.uploadFiles(request);
-    }
+//    @Override
+//    @SuppressWarnings(("unchecked"))
+//    public ApiResult<List<AttachmentDTO>> uploadFile(Lis request) {
+//        return attachmentService.uploadFiles(request);
+//    }
 
     @Override
     public ResponseEntity<?> downloadFile(Long id, String view, HttpServletResponse response) {
