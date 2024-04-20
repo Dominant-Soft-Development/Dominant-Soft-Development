@@ -3,7 +3,6 @@ package com.example.dominantsoftdevelopment.model;
 import com.example.dominantsoftdevelopment.model.baseData.BaseModel;
 import com.example.dominantsoftdevelopment.model.enums.Roles;
 import com.example.dominantsoftdevelopment.model.enums.Status;
-import com.example.dominantsoftdevelopment.notification.entity.NotificationApp;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -51,10 +50,11 @@ public class User extends BaseModel implements UserDetails {
 
     private Status status;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "notification_id" , referencedColumnName = "id")
-    private NotificationApp notificationApp;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "notification_id" , referencedColumnName = "id")
+//    private NotificationApp notificationApp;
 
+    private String firebaseToken;
 
     @Override
     public String getUsername() {

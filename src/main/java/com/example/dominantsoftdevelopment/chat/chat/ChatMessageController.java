@@ -1,6 +1,6 @@
-package com.example.dominantsoftdevelopment.chat.chat_one_on_one.chat;
+package com.example.dominantsoftdevelopment.chat.chat;
 
-import com.example.dominantsoftdevelopment.chat.chat_one_on_one.chat_notification.ChatNotification;
+import com.example.dominantsoftdevelopment.chat.chat_notification.ChatNotification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;

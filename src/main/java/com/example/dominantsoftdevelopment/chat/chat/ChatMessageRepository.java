@@ -1,4 +1,4 @@
-package com.example.dominantsoftdevelopment.chat.chat_one_on_one.chat;
+package com.example.dominantsoftdevelopment.chat.chat;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

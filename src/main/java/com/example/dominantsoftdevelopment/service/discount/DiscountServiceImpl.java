@@ -6,8 +6,13 @@ import com.example.dominantsoftdevelopment.dto.ProductDTO;
 import com.example.dominantsoftdevelopment.exceptions.RestException;
 import com.example.dominantsoftdevelopment.model.Discount;
 import com.example.dominantsoftdevelopment.model.Product;
+import com.example.dominantsoftdevelopment.model.User;
+import com.example.dominantsoftdevelopment.notification.NotificationController;
+import com.example.dominantsoftdevelopment.notification.NotificationMessageDto;
+import com.example.dominantsoftdevelopment.notification.NotificationMessagingService;
 import com.example.dominantsoftdevelopment.repository.DiscountRepository;
 import com.example.dominantsoftdevelopment.repository.ProductRepository;
+import com.example.dominantsoftdevelopment.repository.UserRepository;
 import com.example.dominantsoftdevelopment.rsql.SpecificationBuilder;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,7 +22,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +33,8 @@ public class DiscountServiceImpl implements DiscountService {
     private final DiscountRepository discountRepository;
     private final ProductRepository productRepository;
     private final ModelMapper mapper;
-
+    private final UserRepository userRepository;
+    private final NotificationMessagingService messagingService;
     @Override
     public ApiResult<Boolean> createDiscount(DiscountDTO discountDTO) {
         Long productId = discountDTO.getProduct().getId();
@@ -41,6 +49,16 @@ public class DiscountServiceImpl implements DiscountService {
         if (existDiscount != null) {
             existDiscount.setIsActive(false);
             discountRepository.save(existDiscount);
+        }
+
+        // todo
+        List<User> allUser = userRepository.findAll();
+        Map<String , String>  map= new HashMap<>();
+        map.put("" , "");
+        if (allUser != null){
+            for (User user : allUser) {
+                messagingService.sendWebNotificationByToken(new NotificationMessageDto(user.getFirebaseToken(),"" , "" , "" , map));
+            }
         }
 
         Discount discount = Discount.builder()

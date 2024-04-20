@@ -1,4 +1,4 @@
-package com.example.dominantsoftdevelopment.chat.chat_one_on_one.chat_notification;
+package com.example.dominantsoftdevelopment.chat.chat_notification;
 
 import lombok.*;
 

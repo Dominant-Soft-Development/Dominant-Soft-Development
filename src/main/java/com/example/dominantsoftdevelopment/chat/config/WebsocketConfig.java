@@ -1,4 +1,4 @@
-package com.example.dominantsoftdevelopment.chat.chat_one_on_one.config;
+package com.example.dominantsoftdevelopment.chat.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,6 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
             registry.enableSimpleBroker("/user");
             registry.setApplicationDestinationPrefixes("/app");
             registry.setUserDestinationPrefix("/user");
-
     }
 
     @Override

@@ -1,6 +1,6 @@
-package com.example.dominantsoftdevelopment.chat.chat_one_on_one.chat;
+package com.example.dominantsoftdevelopment.chat.chat;
 
-import com.example.dominantsoftdevelopment.chat.chat_one_on_one.chat_room.ChatRoomService;
+import com.example.dominantsoftdevelopment.chat.chat_room.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
