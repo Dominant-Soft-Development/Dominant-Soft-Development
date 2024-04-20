@@ -2,13 +2,15 @@ package com.example.dominantsoftdevelopment.service.product;
 
 import com.example.dominantsoftdevelopment.dto.AddProductDTO;
 import com.example.dominantsoftdevelopment.dto.ApiResult;
-import com.example.dominantsoftdevelopment.repository.ProductFeaturesRepository;
 import com.example.dominantsoftdevelopment.dto.ProductFuturesDTO;
 import com.example.dominantsoftdevelopment.exceptions.RestException;
-import com.example.dominantsoftdevelopment.model.*;
+import com.example.dominantsoftdevelopment.model.Product;
+import com.example.dominantsoftdevelopment.model.ProductFeatureName;
+import com.example.dominantsoftdevelopment.model.ProductFeatureValue;
+import com.example.dominantsoftdevelopment.model.ProductFeatures;
 import com.example.dominantsoftdevelopment.repository.*;
 import com.example.dominantsoftdevelopment.repository.product.ProductRepository;
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,13 +56,13 @@ public class ProductServiceImpl implements ProductService {
                     .productFeatureName(productFeatureName)
                     .build();
 
-            if (productFuturesDTO.getProductFutureValue()!=null){
+            if (productFuturesDTO.getProductFutureValue() != null) {
                 ProductFeatureValue productFeatureValue = ProductFeatureValue.builder()
                         .productFeatureName(productFeatureName)
                         .value(productFuturesDTO.getProductFutureValue().getValue()).build();
                 productFeatureValueRepository.save(productFeatureValue);
                 productFeatures.setProductFutureValue(productFeatureValue);
-            }else {
+            } else {
                 productFeatures.setValue(productFuturesDTO.getValue());
             }
             productFeaturesRepository.save(productFeatures);
