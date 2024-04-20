@@ -1,5 +1,6 @@
 package com.example.dominantsoftdevelopment.utils;
 
+import com.example.dominantsoftdevelopment.controller.attachment.AttachmentController;
 import com.example.dominantsoftdevelopment.exceptions.RestException;
 import com.example.dominantsoftdevelopment.model.User;
 import lombok.experimental.UtilityClass;
