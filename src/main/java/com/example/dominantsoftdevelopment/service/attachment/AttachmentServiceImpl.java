@@ -6,6 +6,7 @@ import com.example.dominantsoftdevelopment.exceptions.RestException;
 import com.example.dominantsoftdevelopment.model.Attachment;
 import com.example.dominantsoftdevelopment.repository.AttachmentRepository;
 import jakarta.servlet.http.HttpServletResponse;
+import org.hibernate.annotations.CurrentTimestamp;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,14 +42,18 @@ public record AttachmentServiceImpl(AttachmentRepository attachmentRepository,
     }
 
     @Override
-    public ApiResult<List<AttachmentDTO>> uploadFiles(List<MultipartHttpServletRequest> photos) {
-        List<Attachment> attachments = new LinkedList<>();
-        for (MultipartHttpServletRequest photo : photos) {
-            Attachment attachment = getAttachment(photo);
-            Attachment attachment1 = attachmentRepository.save(attachment);
-            attachments.add(attachment1);
-        }
-       return ApiResult.successResponse(attachments.stream().map(this::mapAttachmentDTO).toList());
+    public ApiResult<List<AttachmentDTO>> uploadFiles(List<MultipartFile>photos) {
+        System.out.println(photos.size());
+        List<AttachmentDTO> attachments = new LinkedList<>();
+//        for (MultipartFile photo : photos) {
+//            attachments.add(uploadFile(photo).getData());
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                throw RestException.restThrow("Upload file is wrong",HttpStatus.BAD_REQUEST);
+//            }
+//        }
+       return ApiResult.successResponse(attachments);
     }
 
     private Attachment getAttachment(MultipartHttpServletRequest photo) {
@@ -135,7 +140,7 @@ public record AttachmentServiceImpl(AttachmentRepository attachmentRepository,
         return AttachmentDTO.builder()
                 .id(attachment.getId())
                 .originalName(attachment.getName())
-                .url(makeFileUrl(attachment.getId()))
+                .url(makeFileUrl(+attachment.getId()))
                 .build();
     }
 

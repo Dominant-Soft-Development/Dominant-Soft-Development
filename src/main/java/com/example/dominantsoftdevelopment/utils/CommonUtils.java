@@ -1,6 +1,5 @@
 package com.example.dominantsoftdevelopment.utils;
 
-import com.example.dominantsoftdevelopment.controller.attachment.AttachmentController;
 import com.example.dominantsoftdevelopment.exceptions.RestException;
 import com.example.dominantsoftdevelopment.model.User;
 import lombok.experimental.UtilityClass;
@@ -23,6 +22,6 @@ public class CommonUtils {
     public static String makeFileUrl(Long id) {
         return ServletUriComponentsBuilder
                 .fromCurrentContextPath().path(AttachmentController.BASE_PATH)
-                .path(id.toString()).toUriString();
+                .path("/"+id.toString()).toUriString();
     }
 }
