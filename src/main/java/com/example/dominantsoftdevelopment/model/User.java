@@ -2,6 +2,8 @@ package com.example.dominantsoftdevelopment.model;
 
 import com.example.dominantsoftdevelopment.model.baseData.BaseModel;
 import com.example.dominantsoftdevelopment.model.enums.Roles;
+import com.example.dominantsoftdevelopment.model.enums.Status;
+import com.example.dominantsoftdevelopment.notification.entity.NotificationApp;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,17 +24,17 @@ import java.util.Collections;
 @Table(name = "users")
 public class User extends BaseModel implements UserDetails {
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String firstName;
 
     private String lastName;
 
-    @Column(nullable = false, unique = true)
+//    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
     private String email;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String password;
 
     @Builder.Default
@@ -44,8 +46,14 @@ public class User extends BaseModel implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Roles roles;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Address address;
+
+    private Status status;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "notification_id" , referencedColumnName = "id")
+    private NotificationApp notificationApp;
 
 
     @Override
@@ -77,4 +85,9 @@ public class User extends BaseModel implements UserDetails {
         return isAccountNonExpired() && isAccountNonLocked() && isCredentialsNonExpired() && isEnabled();
     }
 
+    public User(String firstName, String phoneNumber, String password) {
+        this.firstName = firstName;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+    }
 }

@@ -1,6 +1,5 @@
 package com.example.dominantsoftdevelopment.service.emailService;
 
-
 import com.example.dominantsoftdevelopment.exceptions.RestException;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
@@ -11,8 +10,6 @@ import java.util.Properties;
 import java.util.Random;
 
 public class EmailService {
-
-
     public static boolean sendMessageToEmail(String email, String messageBody) {
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
@@ -55,5 +52,4 @@ public class EmailService {
         int i = new Random().nextInt(600000);
         return String.valueOf(i);
     }
-
 }

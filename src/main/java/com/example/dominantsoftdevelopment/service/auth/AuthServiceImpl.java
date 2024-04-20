@@ -7,7 +7,6 @@ import com.example.dominantsoftdevelopment.dto.RegisterDTO;
 import com.example.dominantsoftdevelopment.dto.TokenDTO;
 import com.example.dominantsoftdevelopment.exceptions.RestException;
 import com.example.dominantsoftdevelopment.model.User;
-import com.example.dominantsoftdevelopment.model.enums.Country;
 import com.example.dominantsoftdevelopment.model.enums.Roles;
 import com.example.dominantsoftdevelopment.otp.OTP;
 import com.example.dominantsoftdevelopment.repository.AttachmentRepository;
@@ -27,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -86,13 +84,21 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ApiResult<?> register(RegisterDTO registerDTO) {
-        OTP otp = otpRepository.findByPhoneNumber(registerDTO.phoneNumber())
+       /* OTP otp = otpRepository.findByPhoneNumber(registerDTO.phoneNumber())
                 .orElseThrow(() -> RestException.restThrow("PhoneNumber not found wrong sms code", HttpStatus.BAD_REQUEST));
 
-        if (userRepository.findByPhoneNumber(registerDTO.phoneNumber()).isPresent()){
+         if (userRepository.findByPhoneNumber(registerDTO.phoneNumber()).isPresent()){
             throw RestException.restThrow("User already exsist",HttpStatus.BAD_REQUEST);
         }
+        */
 
+        // authenticating with email
+        OTP otp = otpRepository.findByEmail(registerDTO.email())
+                .orElseThrow(() -> RestException.restThrow("Email not found or  wrong email code", HttpStatus.BAD_REQUEST));
+
+        if (userRepository.findByEmail(registerDTO.email()).isPresent()){
+            throw RestException.restThrow("User already exsist",HttpStatus.BAD_REQUEST);
+        }
         if (!registerDTO.code().equals(Integer.parseInt(otp.getCode()))){
             throw RestException.restThrow("Wrong sms code",HttpStatus.BAD_REQUEST);
         }
@@ -111,7 +117,9 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
 
         return ApiResult.successResponse(generateTokenDTO(user));
+
     }
+
 
     @Override
     public ApiResult<Boolean> sendEmail(String email) {
@@ -120,8 +128,9 @@ public class AuthServiceImpl implements AuthService {
         if (!EmailService.sendMessageToEmail(email,generationCode)){
             throw RestException.restThrow("send email wrong",HttpStatus.BAD_REQUEST);
         }
+        System.out.println(generationCode);
 
-        otpRepository.save(OTP.builder().email(email).code(generationCode).build());
+        otpRepository.save(OTP.builder().email(email).code(generationCode).sendTime(LocalDateTime.now()).build());
         return ApiResult.successResponse(true);
     }
 
@@ -166,7 +175,6 @@ public class AuthServiceImpl implements AuthService {
     public User checkCredential(String username, String password) {
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-
         return (User) authentication.getPrincipal();
     }
 }

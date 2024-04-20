@@ -3,8 +3,6 @@ package com.example.dominantsoftdevelopment.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.*;
-
 @Entity
 @Getter
 @Setter
