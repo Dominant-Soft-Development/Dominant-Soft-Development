@@ -1,13 +1,16 @@
 package com.example.dominantsoftdevelopment.service.discount;
 
+import com.example.dominantsoftdevelopment.dto.AddDiscountDTO;
 import com.example.dominantsoftdevelopment.dto.ApiResult;
 import com.example.dominantsoftdevelopment.dto.DiscountDTO;
 import com.example.dominantsoftdevelopment.dto.ProductDTO;
 import com.example.dominantsoftdevelopment.exceptions.RestException;
 import com.example.dominantsoftdevelopment.model.Discount;
 import com.example.dominantsoftdevelopment.model.Product;
+import com.example.dominantsoftdevelopment.notification.NotificationMessagingService;
 import com.example.dominantsoftdevelopment.repository.DiscountRepository;
 import com.example.dominantsoftdevelopment.repository.ProductRepository;
+import com.example.dominantsoftdevelopment.repository.UserRepository;
 import com.example.dominantsoftdevelopment.rsql.SpecificationBuilder;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

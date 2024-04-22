@@ -9,7 +9,7 @@ import com.example.dominantsoftdevelopment.model.User;
 import com.example.dominantsoftdevelopment.repository.OrderItemRepository;
 import com.example.dominantsoftdevelopment.repository.OrderRepository;
 import com.example.dominantsoftdevelopment.repository.UserRepository;
-import com.example.dominantsoftdevelopment.repository.product.ProductRepository;
+import com.example.dominantsoftdevelopment.repository.ProductRepository;
 import com.example.dominantsoftdevelopment.utils.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
