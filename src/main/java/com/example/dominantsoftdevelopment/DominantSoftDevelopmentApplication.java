@@ -11,6 +11,4 @@ public class DominantSoftDevelopmentApplication  {
     public static void main(String[] args) {
         SpringApplication.run(DominantSoftDevelopmentApplication.class, args);
     }
-
-
 }
