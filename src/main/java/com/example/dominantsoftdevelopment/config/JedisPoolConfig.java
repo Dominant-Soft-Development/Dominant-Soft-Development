@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 public class JedisPoolConfig {
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
-        RedisStandaloneConfiguration localhost = new RedisStandaloneConfiguration("redis-17299.c10.us-east-1-2.ec2.cloud.redislabs.com", 17299);
+        RedisStandaloneConfiguration localhost = new RedisStandaloneConfiguration("redis-10789.c239.us-east-1-2.ec2.redns.redis-cloud.com", 10789);
         localhost.setUsername("default");
-        localhost.setPassword("cAC6xkpAasyWtSPpIHsX5z8Xq5p7OMG2");
+        localhost.setPassword("gcXQGRg6tuDcipVxivAOPv60iZQI8Bbo");
         return new JedisConnectionFactory(localhost);
     }
 }
