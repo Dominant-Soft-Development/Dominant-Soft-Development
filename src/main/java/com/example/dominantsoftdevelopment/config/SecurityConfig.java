@@ -24,11 +24,20 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
+    final String[] MATCHERS = {
+            "swagger - ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/webjars/** "
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity.authorizeHttpRequests(matcherRegistry -> {
             matcherRegistry.requestMatchers("/api/auth/**").permitAll();
+            matcherRegistry.requestMatchers(MATCHERS).permitAll();
             matcherRegistry.requestMatchers("/api/**").authenticated();
             matcherRegistry.anyRequest().permitAll();
         });
