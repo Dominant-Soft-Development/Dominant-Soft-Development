@@ -1,5 +1,6 @@
 package com.example.dominantsoftdevelopment.controller.discount;
 
+import com.example.dominantsoftdevelopment.dto.AddDiscountDTO;
 import com.example.dominantsoftdevelopment.dto.ApiResult;
 import com.example.dominantsoftdevelopment.dto.DiscountDTO;
 import com.example.dominantsoftdevelopment.service.discount.DiscountService;
@@ -21,33 +22,28 @@ public class DiscountController {
     private final DiscountService discountService;
 
     @PostMapping
-    @Operation(summary = "This API is used for creating discounts")
-    public HttpEntity<ApiResult<Boolean>> createDiscount(@RequestBody @Valid DiscountDTO discountDTO) {
+    public HttpEntity<ApiResult<Boolean>> createDiscount(@RequestBody @Valid AddDiscountDTO discountDTO) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(discountService.createDiscount(discountDTO));
     }
 
     @GetMapping("/{discountId}")
-    @Operation(summary = "This API is used for getting discount by id")
     public HttpEntity<ApiResult<DiscountDTO>> getDiscount(@PathVariable Long discountId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(discountService.getDiscount(discountId));
     }
 
     @GetMapping("/list")
-    @Operation(summary = "This API is used for getting all discounts")
     public HttpEntity<ApiResult<Page<DiscountDTO>>> getDiscount(Pageable pageable, @RequestParam(required = false) String predicate) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(discountService.getAll(pageable, predicate));
     }
 
 
     @PutMapping("/{discountId}")
-    @Operation(summary = "This API is used for updating discounts")
-    public HttpEntity<ApiResult<Boolean>> updateDiscount(@RequestBody @Valid DiscountDTO discountDTO,
+    public HttpEntity<ApiResult<Boolean>> updateDiscount(@RequestBody @Valid AddDiscountDTO discountDTO,
                                                          @PathVariable Long discountId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(discountService.updateDiscount(discountId,discountDTO));
     }
 
     @DeleteMapping("/{discountId}")
-    @Operation(summary = "This API is used for deleting discounts")
     public HttpEntity<ApiResult<Void>> deleteDiscount(@PathVariable Long discountId) {
         discountService.deleteDiscount(discountId);
         return ResponseEntity.noContent().build();

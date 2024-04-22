@@ -1,5 +1,6 @@
 package com.example.dominantsoftdevelopment.service.discount;
 
+import com.example.dominantsoftdevelopment.dto.AddDiscountDTO;
 import com.example.dominantsoftdevelopment.dto.ApiResult;
 import com.example.dominantsoftdevelopment.dto.DiscountDTO;
 import com.example.dominantsoftdevelopment.dto.ProductDTO;
@@ -17,6 +18,7 @@ import com.example.dominantsoftdevelopment.rsql.SpecificationBuilder;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -36,8 +38,8 @@ public class DiscountServiceImpl implements DiscountService {
     private final UserRepository userRepository;
     private final NotificationMessagingService messagingService;
     @Override
-    public ApiResult<Boolean> createDiscount(DiscountDTO discountDTO) {
-        Long productId = discountDTO.getProduct().getId();
+    public ApiResult<Boolean> createDiscount(AddDiscountDTO discountDTO) {
+        Long productId = discountDTO.getProductId();
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> RestException.restThrow("product not found"));
 
@@ -52,7 +54,7 @@ public class DiscountServiceImpl implements DiscountService {
         }
 
         // todo
-        List<User> allUser = userRepository.findAll();
+      /*  List<User> allUser = userRepository.findAll();
         Map<String , String>  map= new HashMap<>();
         map.put("" , "");
         if (allUser != null){
@@ -60,7 +62,7 @@ public class DiscountServiceImpl implements DiscountService {
                 messagingService.sendWebNotificationByToken(new NotificationMessageDto(user.getFirebaseToken(),"" , "" , "" , map));
             }
         }
-
+*/
         Discount discount = Discount.builder()
                     .productId(product)
                     .isActive(discountDTO.getIsActive())
@@ -76,10 +78,13 @@ public class DiscountServiceImpl implements DiscountService {
     public ApiResult<DiscountDTO> getDiscount(Long discountId) {
         Discount discount = get(discountId);
         DiscountDTO discountDTO = DiscountDTO.builder()
+                .id(discount.getId())
+                .createdAt(discount.getCreatedAt())
+                .updatedAt(discount.getUpdatedAt())
                 .isActive(discount.getIsActive())
                 .percentage(discount.getPercentage())
                 .finishedAt(discount.getFinishedAt())
-                .product(mapper.map(discount.getProductId(), ProductDTO.class))
+                .productId(mapper.map(discount.getProductId(), ProductDTO.class))
                 .build();
         return ApiResult.successResponse(discountDTO);
     }
@@ -96,7 +101,7 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public ApiResult<Boolean> updateDiscount(Long discountId, DiscountDTO discountDTO) {
+    public ApiResult<Boolean> updateDiscount(Long discountId, AddDiscountDTO discountDTO) {
         Discount discount = get(discountId);
         checkDate(discount.getFinishedAt());
 

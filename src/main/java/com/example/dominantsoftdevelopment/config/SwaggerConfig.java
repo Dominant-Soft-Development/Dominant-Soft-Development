@@ -34,7 +34,8 @@ import org.springframework.stereotype.Component;
                                         value = "Value extension")})}
                 )),
         servers = {
-                @Server(url = "http://localhost:8080", description = "Localhost"),
+//                @Server(url = "http://localhost:8080", description = "Localhost"),
+                @Server(url = "http://10.0.15.124", description = "Production"),
         },
         security = {
                 @SecurityRequirement(name = "bearerAuth"),
