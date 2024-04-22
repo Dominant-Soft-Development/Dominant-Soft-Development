@@ -49,7 +49,7 @@ public class EmailService {
     }
 
     public static String getGenerationCode(){
-        int i = new Random().nextInt(600000);
+        int i = new Random().nextInt(9999);
         return String.valueOf(i);
     }
 }
