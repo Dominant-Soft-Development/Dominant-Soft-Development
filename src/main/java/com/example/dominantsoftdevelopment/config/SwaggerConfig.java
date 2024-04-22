@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
                                         value = "Value extension")})}
                 )),
         servers = {
-                @Server(url = "https://dominant-soft-development-production.up.railway.app", description = "Localhost"),
+                @Server(url = "https://dominant-soft-development-production.up.railway.app"),
 //                @Server(url = "http://10.0.15.124", description = "Production"),
         },
         security = {
