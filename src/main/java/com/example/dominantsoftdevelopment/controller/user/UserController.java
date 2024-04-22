@@ -1,7 +1,7 @@
 package com.example.dominantsoftdevelopment.controller.user;
 
 import com.example.dominantsoftdevelopment.dto.ApiResult;
-import com.example.dominantsoftdevelopment.dto.DiscountDTO;
+import com.example.dominantsoftdevelopment.dto.EmailUpdateDTO;
 import com.example.dominantsoftdevelopment.dto.UserDTO;
 import com.example.dominantsoftdevelopment.dto.UserUpdateDTO;
 import com.example.dominantsoftdevelopment.model.User;
@@ -35,7 +35,6 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    @Operation(summary = "This API is used for getting all users")
     public HttpEntity<ApiResult<Page<UserDTO>>> getDiscount(Pageable pageable, @RequestParam(required = false) String predicate) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userservice.getAll(pageable, predicate));
     }
@@ -45,6 +44,12 @@ public class UserController {
                                          @Valid @RequestBody UserUpdateDTO updateDTO){
         return ResponseEntity.status(HttpStatus.OK).body(userservice.edit(id, updateDTO));
     }
+
+    @PutMapping("/change/email")
+    public ResponseEntity<ApiResult<Boolean>>edit(@Valid @RequestBody EmailUpdateDTO updateDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(userservice.changeEmail(updateDTO));
+    }
+
 
     @MessageMapping("/user.addUser")
     @SendTo("/user/public")

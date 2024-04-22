@@ -1,25 +1,40 @@
 package com.example.dominantsoftdevelopment.notification;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.ExecutionException;
+import com.example.dominantsoftdevelopment.model.User;
+import com.example.dominantsoftdevelopment.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/notification")
+@RequiredArgsConstructor
 public class NotificationController {
-    private final FCMService fcmService;
 
-    @PostMapping("/send-notification")
-    public ResponseEntity<?> sendNotification(@RequestBody NotificationRequest request) throws ExecutionException, InterruptedException {
-        fcmService.sendMessageToToken(request);
-        return new ResponseEntity<>(new NotificationResponse(HttpStatus.OK.value(), "Notification has been sent."), HttpStatus.OK);
+    private final NotificationMessagingService notificationMessagingService;
+    private final UserRepository repository;
+
+    @PostMapping("/on-violation")
+    public String sendOnViolationWeb(@RequestBody NotificationMessageDto notificationMessage) {
+        return notificationMessagingService.sendWebNotificationByToken(notificationMessage);
     }
 
+
+//    @PostMapping("/require-permission/{id}")
+//    public String sendRequirePermissionAndroid(@RequestBody NotificationMessageDto notificationMessage, @PathVariable Integer id) {
+//        return notificationMessagingService.sendAndroidNotificationByToken(notificationMessage);
+//    }
+//
+//
+//    @PostMapping("/alarm/{id}")
+//    public String sendAlarmAndroid(@RequestBody NotificationMessageDto notificationMessage, @PathVariable Integer id) {
+//        return notificationMessagingService.sendAndroidNotificationByToken(notificationMessage);
+//    }
+
+    @PostMapping("/refresh-token/{id}")
+    public void refreshToken(@RequestBody String token , @PathVariable Long id){
+        User user = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("user id = " + id + " not found"));
+        user.setFirebaseToken(token);
+    }
 }

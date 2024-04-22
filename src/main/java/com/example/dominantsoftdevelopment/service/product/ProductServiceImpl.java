@@ -9,7 +9,6 @@ import com.example.dominantsoftdevelopment.model.ProductFeatureName;
 import com.example.dominantsoftdevelopment.model.ProductFeatureValue;
 import com.example.dominantsoftdevelopment.model.ProductFeatures;
 import com.example.dominantsoftdevelopment.repository.*;
-import com.example.dominantsoftdevelopment.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

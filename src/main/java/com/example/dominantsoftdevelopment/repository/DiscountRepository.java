@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface DiscountRepository extends JpaRepository<Discount, Long>, JpaSpecificationExecutor<Discount> {
 
-    @Query("SELECT d FROM Discount d WHERE d.productId.id = :productId ORDER BY d.createdAt DESC")
+    @Query("SELECT d FROM Discount d WHERE d.productId.id = :productId ORDER BY d.createdAt DESC LIMIT 1")
     Optional<Discount> findLastDiscountByProductId(Long productId);
 
     List<Discount> findAllByProductIdAndIsActiveTrue(Product product);

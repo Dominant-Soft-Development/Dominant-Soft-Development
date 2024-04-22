@@ -100,7 +100,7 @@ public class AuthServiceImpl implements AuthService {
             throw RestException.restThrow("User already exsist",HttpStatus.BAD_REQUEST);
         }
         if (!registerDTO.code().equals(Integer.parseInt(otp.getCode()))){
-            throw RestException.restThrow("Wrong sms code",HttpStatus.BAD_REQUEST);
+            throw RestException.restThrow("Wrong sms code", HttpStatus.BAD_REQUEST);
         }
         if (otp.getSendTime().plusMinutes(3).isBefore(LocalDateTime.now())){
             throw RestException.restThrow("Code expired",HttpStatus.BAD_REQUEST);

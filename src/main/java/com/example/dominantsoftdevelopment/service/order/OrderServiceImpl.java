@@ -1,9 +1,6 @@
 package com.example.dominantsoftdevelopment.service.order;
 
-import com.example.dominantsoftdevelopment.dto.AddOrderItemDTO;
-import com.example.dominantsoftdevelopment.dto.ApiResult;
-import com.example.dominantsoftdevelopment.dto.OrderDTO;
-import com.example.dominantsoftdevelopment.dto.OrderItemDTO;
+import com.example.dominantsoftdevelopment.dto.*;
 import com.example.dominantsoftdevelopment.exceptions.RestException;
 import com.example.dominantsoftdevelopment.model.OrderItem;
 import com.example.dominantsoftdevelopment.model.Orders;
@@ -33,16 +30,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public ApiResult<Boolean> makeOrder(List<AddOrderItemDTO> orderItems) {
+    public ApiResult<Boolean> makeOrder(AddOrderDTO addOrderDTO) {
         Orders order = new Orders();
         orderRepository.save(order);
         OrderItem orderItem = new OrderItem();
-        Long productId = 1L;
-        double totalPrice = 0;
+        Product product;
+        Long productId;
+        double totalPrice=0;
 
-        for (AddOrderItemDTO itemDTO : orderItems) {
+        for (AddOrderItemDTO itemDTO : addOrderDTO.getOrderItems()) {
+            totalPrice = 0;
             productId = itemDTO.getProductId();
-            Product product = productRepository.findById(productId)
+            product = productRepository.findById(productId)
                     .orElseThrow(() -> RestException.restThrow("Product not found"));
 
             orderItem.setOrderId(order);
@@ -55,17 +54,41 @@ public class OrderServiceImpl implements OrderService {
         }
         order.setTotalPrice(totalPrice);
         order.setCustomer(CommonUtils.getCurrentUserFromContext());
+        order.setPayType(addOrderDTO.getPayType());
         orderRepository.save(order);
 
         return ApiResult.successResponse(true);
     }
 
     @Override
-    public ApiResult<List<OrderDTO>> getOrders(Long userId) {
+    public ApiResult<OrderDTO> getOrder(Long orderId) {
+        Orders order = orderRepository
+                .findById(orderId)
+                .orElseThrow(() -> RestException.restThrow("Order not found"));
+
+        List<OrderItem> items = getOrderItemsByOrderId(order);
+        List<OrderItemDTO> list = items.stream()
+                .map(orderItem -> modelMapper.map(orderItem, OrderItemDTO.class))
+                .toList();
+        OrderDTO orderDTO = OrderDTO.builder()
+                .createdAt(order.getCreatedAt())
+                .id(order.getId())
+                .orderItems(list)
+                .totalPrice(order.getTotalPrice())
+                .build();
+        return ApiResult.successResponse(orderDTO);
+    }
+
+    private List<OrderItem> getOrderItemsByOrderId(Orders order) {
+        return orderItemRepository.findByOrderId(order);
+    }
+
+    @Override
+    public ApiResult<List<OrderDTO>> getUserOrders(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> RestException.restThrow("User not found"));
         List<Orders> orders = orderRepository
-                .findAllByCustomerId(userId).orElse(List.of());
+                .findAllByDeletedFalseAndCustomerId(userId).orElse(List.of());
 
         if (orders.isEmpty()) {
             return ApiResult.successResponse(List.of());
@@ -73,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderDTO> orderDTOS = new ArrayList<>();
 
         for (Orders order : orders) {
-            List<OrderItem> items = orderItemRepository.findByOrderId(order);
+            List<OrderItem> items = getOrderItemsByOrderId(order);
             List<OrderItemDTO> list = items.stream()
                     .map(orderItem -> modelMapper.map(orderItem, OrderItemDTO.class))
                     .toList();
@@ -90,4 +113,12 @@ public class OrderServiceImpl implements OrderService {
         return ApiResult.successResponse(orderDTOS);
     }
 
+    @Override
+    public ApiResult<Boolean> delete(Long orderId) {
+        Orders order = orderRepository.findById(orderId)
+                .orElseThrow(() -> RestException.restThrow("Order not found"));
+        order.setDeleted(true);
+        orderRepository.save(order);
+        return ApiResult.successResponse(true);
+    }
 }

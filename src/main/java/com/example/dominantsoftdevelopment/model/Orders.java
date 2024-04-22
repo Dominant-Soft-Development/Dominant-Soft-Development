@@ -1,6 +1,7 @@
 package com.example.dominantsoftdevelopment.model;
 
 import com.example.dominantsoftdevelopment.model.baseData.BaseModel;
+import com.example.dominantsoftdevelopment.model.enums.PayType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
@@ -19,5 +20,7 @@ public class Orders extends BaseModel {
 
     @ManyToOne
     User customer;
+
+    PayType payType;
 
 }

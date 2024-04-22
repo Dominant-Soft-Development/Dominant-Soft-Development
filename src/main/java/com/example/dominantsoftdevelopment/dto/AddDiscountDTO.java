@@ -4,20 +4,16 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class DiscountDTO {
-    Long id;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
-    boolean deleted;
+public class AddDiscountDTO {
+
+    Long productId;
     int percentage;
-    ProductDTO productId;
     Boolean isActive;
     LocalDateTime finishedAt;
 }
