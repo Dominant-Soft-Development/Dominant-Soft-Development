@@ -1,46 +1,57 @@
 package com.example.dominantsoftdevelopment.config;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.extensions.Extension;
-import io.swagger.v3.oas.annotations.extensions.ExtensionProperty;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import io.swagger.v3.oas.annotations.security.SecuritySchemes;
-import io.swagger.v3.oas.annotations.servers.Server;
-import org.springframework.stereotype.Component;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.ExternalDocumentation;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.OAuthFlow;
+import io.swagger.v3.oas.models.security.OAuthFlows;
+import io.swagger.v3.oas.models.security.Scopes;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
-@SecuritySchemes(value = {
-        @SecurityScheme(
-                name = "bearerAuth",
-                description = "Bearer Tokkenni kiriting",
-                type = SecuritySchemeType.HTTP,
-                bearerFormat = "JWT",
-                scheme = "bearer",
-                in = SecuritySchemeIn.HEADER
-        )
-})
-@OpenAPIDefinition(
-        info = @Info(title = "Dominant Soft Development",
-                description = "Dominant Soft Development ✔️",
-                contact = @Contact(
-                        url = "https://olx.uz",
-                        email = "no0404ir@gmail.com",
-                        extensions = {@Extension(name = "Dominant Soft Development",
-                                properties = {@ExtensionProperty(name = "FirstExtension",
-                                        value = "Value extension")})}
-                )),
-        servers = {
-                @Server(url = "https://dominant-soft-development.up.railway.app/"),
-//                @Server(url = "http://10.0.15.124", description = "Production"),
-        },
-        security = {
-                @SecurityRequirement(name = "bearerAuth"),
-        }
-)
-@Component
+import java.util.List;
+
+@Configuration
+@EnableWebSecurity
 public class SwaggerConfig {
+    @Bean
+    public OpenAPI springOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Spring 6 Swagger 2 Annotation Example")
+                        .description("Spring 6 Swagger Simple Application")
+                        .version("${api.version}")
+                        .contact(new Contact()
+                                .name("Dominat Soft Devlopment")
+                                .email("mamadiyevsayyod5@gmail.com")
+                        )
+                        .license(new License()
+                                .name("Apache 2.0")
+                                .url("http://springdoc.org"))
+                        .termsOfService("http://swagger.io/terms/"))
+                .externalDocs(new ExternalDocumentation()
+                        .description("SpringShop Wiki Documentation")
+                        .url("https://github.com/Dominant-Soft-Development/Dominant-Soft-Development"))
+                .servers(List.of(
+                        new Server()
+//                                .url("http://localhost:8080/")
+                                .url("https://dominant-soft-development.up.railway.app/")
+                                .description("Production")
+                )).addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .components(new Components()
+                        .addSecuritySchemes("bearerAuth", new SecurityScheme()
+                                .name("bearerAuth")
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")));
+
+    }
+
 }
